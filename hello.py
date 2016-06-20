@@ -1,29 +1,34 @@
-#!/usr/bin/python
-import os
+#!/usr/bin/env python
 import cgi
-import cgitb
-cgitb.enable()
+import random
 
-num = 0
+# dict of words
+pre = ("nice ", "lucky ", "rich ", "good ", "big ", "strong ", "long ", "fat ", "funny ", "serious ", "awersome ", "unreal ", "fast ", "slow ", "tall ")
 print "Content-type:text/html\r\n\r\n"
 print '<html>'
-print '<head><title>My First CGI Program</title></head>'
+print '<head><title>CGI Program</title></head>'
 print '<body>'
-print '<h1>Hello Program!</h1>'
 form = cgi.FieldStorage()
-print '<form method="get" action="hello.py">'
+print '<form method="get" action="hello.py">'  # input data form
 print '<p>Name: <input type="text" name="name"/></p>'
 print '<input type="submit" value="Submit" />'
 print '</form>'
 if form.getvalue("name"):
     name = form.getvalue("name")
-    print '<h1>Hello ' + name + '</h1>'
-    with open("db.txt") as f:
-        pdb = f.read()
-        print(str(pdb))
-    num = num + 1
-    cdb = pdb + name + str(num) + " \n"
-    with open("db.txt", 'w+') as f:
-            f.write(cdb)
+    with open("db.txt") as f:  # reading database
+        prevdb = f.read()
+    fp = prevdb.split(" ")
+    name = str(name)
+    if fp.count(name):  # if not new name input
+        n = fp[fp.index(name) + 1]
+        n = int(n)
+        print '<h1>Nice to see you again ' + pre[n] + name + '</h1>'
+    else:  # if new name input
+        str(prevdb)
+        r = random.randrange(0, 14, 1)
+        cdb = prevdb + name + " " + str(r) + " "
+        with open("db.txt", 'w+') as f:
+                f.write(cdb)
+        print '<h1>Nice to see you {} {} </h1>'.format(pre[r], name)
 print '</body>'
 print '</html>'
